@@ -5,7 +5,7 @@
 
 Open-source release of the **LLM-augmented entity-extraction pipeline** and **neonatal disease dictionary** used in:
 
-> **Admission Diagnosis Text Dominates Early Prediction of Severe Neonatal Outcomes — A Multi-Task Deep Learning Study of 11,377 NICU Admissions** *(Scientific Reports, under review, 2026)*
+> **Admission diagnosis text outperforms structured clinical variables in the early prediction of severe neonatal outcomes: a multi-task deep learning study of 11,377 NICU admissions** *(manuscript under editorial consideration at Scientific Reports, 2026)*
 
 ---
 
@@ -49,7 +49,7 @@ Four-layer architecture:
 1. **Layer 1 — Rule pre-processing.** Sentence splitting on Chinese commas / spaces / semicolons; full-width / half-width normalization; punctuation harmonization; traditional → simplified conversion.
 2. **Layer 2 — LLM entity recognition.** Few-shot prompt sent to a Chinese medical LLM (Qwen2.5-Med, HuatuoGPT-II, or any OpenAI / Anthropic API endpoint) returning `(disease, attitude, modifier)` triples. Attitude = {`positive`, `suspected`, `negated`}; modifier = {`active`, `post_op`, `resolved`, `historical`}.
 3. **Layer 3 — Dictionary normalization.** Surface forms are mapped to the six head labels via `data/disease_dict_v1.json`. Conflict-resolution rules handle e.g. *"宫内感染性肺炎"* → `pneumonia` only (not `sepsis`); patent ductus arteriosus *"已关闭"* / *"术后"* → excluded from active CHD.
-4. **Layer 4 — Deterministic rule fallback.** Pure-regex extractor (`extract_with_rules`) used when LLM unavailable. Macro F1 = **0.989** on the cohort (n = 11,377) and = **0.985** on the 100-case manual gold-standard pilot.
+4. **Layer 4 — Deterministic rule fallback.** Pure-regex extractor (`extract_with_rules`) used when LLM unavailable. Macro F1 = **0.988** on the full cohort (n = 11,377, against the rule-dictionary reference labels) and **0.983** on the 100-case manually curated pilot set.
 
 ---
 
@@ -58,7 +58,7 @@ Four-layer architecture:
 ### 1. Install
 
 ```bash
-git clone https://github.com/<USER_OR_ORG>/NeoMTL-NLP.git
+git clone https://github.com/HANDAN-HOSPITAL/NeoMTL-NLP.git
 cd NeoMTL-NLP
 pip install -r requirements.txt
 ```
@@ -109,9 +109,9 @@ python -m src.p1_nlp_extractor \
 
 ## Reproducibility
 
-The full evaluation pipeline used to compute the macro F1 = 0.989 cohort number is **deterministic** (random_state = 42 throughout). The training/validation/test split, TF-IDF hyperparameters (`char_wb`, n-gram 2–4, min_df = 5, max_df = 0.95, max_features = 3000, sublinear_tf = True), and L2 logistic regression baseline (C = 1.0, class_weight = `balanced`) are documented in the manuscript Methods §2.5 and reproducible from `scripts/run_figure_s2_sweep.py` in the manuscript's supplementary package.
+The full evaluation pipeline used to compute the macro F1 = 0.988 cohort number is **deterministic** (random_state = 42 throughout). The training/validation/test split, TF-IDF hyperparameters (`char_wb`, n-gram 2–4, min_df = 5, max_df = 0.95, max_features = 3000, sublinear_tf = True), and L2 logistic regression baseline (C = 1.0, class_weight = `balanced`) are documented in the manuscript Methods §2.5 and reproducible from `scripts/run_figure_s2_sweep.py` in the manuscript's supplementary package.
 
-The pilot-validation set (n = 100, manually curated) and full-cohort reference labels were generated using the rule-based fallback (Layer 4) cross-validated against expert review. The macro F1 numbers reported in the manuscript can be reproduced by running the extractor on any private cohort using the released dictionary.
+The pilot-validation set (n = 100) was manually curated by clinicians; the full-cohort reference labels were generated using the rule-based fallback (Layer 4), with an independent blinded re-check of a random sample (see the article's Methods). The macro F1 numbers reported in the manuscript can be reproduced by running the extractor on any private cohort using the released dictionary.
 
 ---
 
@@ -121,12 +121,13 @@ If you use this code or the disease dictionary in your work, please cite:
 
 ```bibtex
 @article{neomtl2026,
-  title   = {Admission Diagnosis Text Dominates Early Prediction of Severe Neonatal
-             Outcomes: A Multi-Task Deep Learning Study of 11,377 NICU Admissions},
+  title   = {Admission diagnosis text outperforms structured clinical variables in the
+             early prediction of severe neonatal outcomes: a multi-task deep learning
+             study of 11,377 NICU admissions},
   author  = {Zhang, Xiaoxue and Quan, Yanhua and Liu, Yulong and others},
-  journal = {Scientific Reports},
+  journal = {Manuscript under editorial consideration at Scientific Reports},
   year    = {2026},
-  doi     = {<add upon acceptance>}
+  note    = {DOI to be added on publication}
 }
 ```
 
