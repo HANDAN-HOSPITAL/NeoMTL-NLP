@@ -27,7 +27,7 @@ NeoMTL-NLP/
 └── README.md  (this file)
 ```
 
-> **Note on patient data.** The raw 11,377-record cohort is **not** released here — it contains identifiable hospital records and is governed by Handan Central Hospital IRB No. HDYY-LW-25053. The repository ships with eight fully synthetic demo records that exercise every code path in the pipeline. De-identified analytic data may be requested from the corresponding authors, subject to local IRB and data-protection requirements.
+> **Note on patient data.** The raw 11,377-record cohort is **not** released here — it contains identifiable hospital records and is governed by the ethics approvals of the participating hospitals (Handan Central Hospital, Approval No. (2025) Lunshen Keyan No. 078; the parent multicentre project approved by the Institutional Review Board of Handan First Hospital, No. HDYY-LW-25053; Anyang Children's Hospital, No. AFYLL-XM-2025-02-01; and the Second Affiliated Hospital of Wenzhou Medical University, No. 2026-K-78-01). The repository ships with eight fully synthetic demo records that exercise every code path in the pipeline. De-identified analytic data may be requested from the corresponding authors, subject to local IRB and data-protection requirements.
 
 ---
 
